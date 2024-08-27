@@ -1,0 +1,5 @@
+# React Checkout Demo
+This is a demo application showcasing the use of our company's React library for handling checkout processes. The app demonstrates integration with Recurly, including address forms, payment methods, and 3D Secure authentication.
+
+## Getting Started
+To get started with the React Checkout Demo, follow the instructions below to clone the repository, add your API keys, install dependencies, and run the application locally.

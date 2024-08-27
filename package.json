@@ -1,0 +1,45 @@
+{
+  "name": "react-rjs-demo",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@recurly/react-recurly": "^2.0.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "esbuild": "^0.21.5",
+    "express": "^4.19.2",
+    "method-override": "^3.0.0",
+    "nanoid": "^3.3.7",
+    "node-fetch": "^3.3.2",
+    "node-uuid": "^1.4.8",
+    "nodemon": "^3.1.4",
+    "picocolors": "^1.0.1",
+    "postcss": "^8.4.41",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.3.0",
+    "react-router-dom": "^6.26.1",
+    "react-uuid": "^2.0.0",
+    "recurly": "^4.54.0",
+    "rollup": "^4.21.1",
+    "short-uuid": "^5.2.0",
+    "source-map-js": "^1.2.0",
+    "uuid": "^10.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@vitejs/plugin-react-swc": "^3.7.0",
+    "concurrently": "^8.2.2",
+    "vite": "^5.4.2"
+  }
+}
