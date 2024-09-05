@@ -6,7 +6,6 @@ To get started follow the instructions below to clone the repository, add your A
 
 ## Prerequisites
 Make sure you have the following installed on your machine:
-
 - Node.js (v18 or later).
 - npm (v10 or later).
 - Recurly site in sandbox, or development mode. 
@@ -14,38 +13,34 @@ Make sure you have the following installed on your machine:
 
 ## Installation
 1. Clone the Repository:
-
 ```
 git clone https://github.com/mattc-27/react-rjs-demo.git
 cd react-rjs-demo
 ```
 
 2. Add Your API Keys:
-
 - Create a .env file in the root directory of the project.
 - Add your public and private Recurly API keys to the .env file
-
 ```
 PUBLIC_API_KEY=your-public-key-here
 PRIVATE_API_KAY=your-private-key-here
 ```
 
 3. Install Dependencies:
-
 ```
 npm install
 ```
 
 ## Running the App
 To start the app locally run the following command:
-
 ```
 npm start
 ```
 
-## Setting the Plan Name in the URL
-To set a plan for the checkout pricing you need to pass a plan code from your site in the URL using the planName query parameter in the URL:
+## Setting the Plan Code
+Enter a plan code from your Recurly site. 
 
+Alternatively, set a plan via the URL by passing a plan code using the planName query parameter:
 ```
 http://localhost:3000/?planName=yourPlanCode
 ```

@@ -18,7 +18,7 @@ export default function Cart({ pricingFormState, price }) {
             </div>
             {recurlyError ? <span style={{ color: 'red' }}>{recurlyError.message}</span> : ''}
             {showPrice ? (
-                <PricingTable pricingFormState={pricingFormState} price={price} />
+                <PricingTable pricingFormState={pricingFormState} price={price}  />
             ) : null}
             {loading && 'Loading'}
         </>

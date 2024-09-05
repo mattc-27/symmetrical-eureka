@@ -9,11 +9,10 @@ export default function AddressForm({ setAccountDetails }) {
 
     return (
         <div className="form-container">
-            <h2>Billing address</h2>
+            <h2 id='addressTitle'>Billing address</h2>
             <div className='form-row'>
                 <FormInput
                     label={'First name'}
-                    //placeholder={'First name'}
                     defaultValue={'First'}
                     name='firstName'
                     onChange={e => handleChange('firstName', e.target.value)}
@@ -70,7 +69,6 @@ export default function AddressForm({ setAccountDetails }) {
                 />
                 <FormInput
                     label={'Country'}
-                    //placeholder={'US'}
                     defaultValue={'US'}
                     name='Country'
                     onChange={e => handleChange('country', e.target.value)}

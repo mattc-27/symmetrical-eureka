@@ -1,5 +1,6 @@
 /node_modules
 /dist
+/src/tests
 .gcloudignore
 .env
 .DS_Store

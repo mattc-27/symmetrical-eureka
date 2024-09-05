@@ -15,13 +15,16 @@ export default function PricingTable(props) {
                                 Quantity
                             </th>
                         </tr>
-                        <tr>
-                            <td className="r1" style={{ borderBottom: '1px solid #252525' }}>{
+                             {/*{<tr>
+                            <td className="r1" style={{ borderBottom: '1px solid #252525' }}>
+                                {props.plan.name}
+                           
                                 props.pricingFormState.plan === '5a847f3681e6' ? 'Basic'
                                     : props.pricingFormState.plan === '44a63ceedf5e' ? 'Premium'
-                                        : 'Annual'}</td>
+                                        : 'Annual'} 
+                            </td>
                             <td className="r2" style={{ borderBottom: '1px solid #252525' }}>{props.pricingFormState.planQuantity}</td>
-                        </tr>
+                        </tr>*/}
                         {props.pricingFormState.addons &&
                             // eslint-disable-next-line no-unused-vars
                             props.pricingFormState.addons.map((addon, i) => (

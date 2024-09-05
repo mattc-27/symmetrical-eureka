@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useRecurly, useCheckoutPricing, CardElement, ThreeDSecureAction } from '@recurly/react-recurly';
-
+import { useRecurly, useCheckoutPricing, CardElement, ThreeDSecureAction, RiskDataCollector } from '@recurly/react-recurly';
 import uuid from 'react-uuid';
 
 import AddressForm from '../components/checkout/AddressForm';
 import Cart from '../components/checkout/Cart';
-
+import { PlanInput } from '../components/FormComponents';
 import { CompletePurchase } from '../components/Buttons';
-import { submitPurchase, submitThreeDSecurePurchase } from '../services/purchase';
+import { submitPurchase, submitThreeDSecurePurchase, fetchPlans } from '../services/purchase';
 
 
 export default function Home() {
 
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const planName = searchParams.get('planName');
 
     const [purchaseRequest, setPurchaseRequest] = useState();
     const [purchaseRequestBody, setpurchaseRequestBody] = useState('');
@@ -30,7 +28,8 @@ export default function Home() {
     const [actionTokenId, setActionTokenId] = useState('');
     const [resultToken, setResultToken] = useState('');
 
-    {/*        */ }
+    const [planCodeInput, setPlanCodeInput] = useState('');
+
     const [accountDetails, setAccountDetails] = useState({
         firstName: '',
         lastName: '',
@@ -42,23 +41,14 @@ export default function Home() {
     });
 
     const [pricingFormState, setPricingFormState] = useState({
-        plan: '' /*location.state*/,
+        plan: '',
         planQuantity: 1,
         currency: 'USD',
         addons: []
     });
 
-    {/*        */ }
-    useEffect(() => {
-        setPricingFormState({
-            plan: planName || '5a847f3681e6',
-            planQuantity: 1,
-            currency: 'USD',
-            addons: []
-        })
-    }, [])
 
-    // Set pricing 
+    /// Set pricing 
     useEffect(() => {
         setRecurlyError(null);
         const subscriptions = pricingFormState.plan ? [{
@@ -67,10 +57,21 @@ export default function Home() {
             addons: pricingFormState.addons
         }] : [];
         setPricing({ ...pricingFormState, subscriptions });
-        //console.log(price);
+        console.log(pricingFormState);
     }, [setPricing, setPricingFormState, pricingFormState]);
 
-    {/*        */ }
+    const handlePlanInput = (e) => {
+        const plan = e.target.value;
+        setPlanCodeInput(plan)
+        setPricingFormState({ ...pricingFormState, plan: plan })
+    }
+
+    useEffect(() => {
+        console.log(planCodeInput)
+    }, [planCodeInput])
+
+
+    /// Create purchase
     const handlePurchaseSubmit = event => {
         if (event.preventDefault) event.preventDefault();
         recurly.token(formRef.current, async (err, token) => {
@@ -90,11 +91,11 @@ export default function Home() {
                 setpurchaseRequestBody({ ...body })
                 const res = await submitPurchase({ ...body })
                 if (res.threeDSecure === true) {
-                    //console.log({ message: '3ds required', actionTokenId: res.threeDSecureActionTokenId })
+                    console.log({ message: '3ds required', actionTokenId: res.threeDSecureActionTokenId })
                     setPurchaseRequest({ ...body })
                     setActionTokenId(res.threeDSecureActionTokenId)
                 } else {
-                    //console.log('Successful purchase', res.invoiceCollection);
+                    console.log('Successful purchase', res.invoiceCollection);
                     navigate(`/success/${res.accountId}`, { state: { ...res } });
                 }
             }
@@ -102,7 +103,7 @@ export default function Home() {
     }
 
 
-    {/* 3D Secure        */ }
+    /// 3D Secure 
     useEffect(() => {
         console.log('received action token id', actionTokenId)
     }, [setActionTokenId])
@@ -110,22 +111,23 @@ export default function Home() {
     const handleThreeDSecureToken = token =>
         setResultToken(`${token.id}`);
 
-    {/* resultToken      */ }
+
+    /// 3D Secure resultToken
     useEffect(() => {
         //console.log(resultToken)
         async function threeDSecurePurchase() {
             try {
                 const res = updateThreeDSecurePurchase(['three_d_secure_action_result_token_id'], resultToken)
-                //console.log(res)
+                console.log(res)
                 const response = await submitThreeDSecurePurchase(res)
                 //console.log(response);
                 if (response.threeDSecure === true) {
                     setPurchaseRequest({ ...res })
                     setActionTokenId(response.threeDSecureActionTokenId)
                 } else {
-                    //console.log('Successful purchase', response);
-                    //const accountId = response.accountId;
-                    navigate(`/success/${response.accountId}`, { state: { ...response } });
+                    console.log('Successful purchase', response.invoiceCollection);
+                    const accountId = response.accountId;
+                    navigate(`/success/${accountId}`, { state: { ...response } });
                 }
                 submitThreeDSecurePurchase(res);
             } catch (error) {
@@ -141,14 +143,36 @@ export default function Home() {
         return body
     }
 
+    const handleError = (error) => {
+        console.log(error)
+    };
 
     return (
         <div className='page-container'>
+            <div className='plan-selection'>
+                <div className='plan-input-group'>
+                    <PlanInput
+                        label={'Plan code'}
+                        placeholder={'Plan code'}
+                        value={planCodeInput}
+                        name='plan_code'
+                        onChange={handlePlanInput}
+                        type={'text'}
+                    />
+                </div>
+            </div>
             <form
                 ref={formRef}
                 onSubmit={handlePurchaseSubmit}
                 className='main-form'
             >
+
+                {/* Risk data collector for kount fraud mgmt 
+                <RiskDataCollector
+                    strategy="kount"
+                    onError={handleError} />
+             */}
+
                 <div className='content-column'>
                     <AddressForm setAccountDetails={setAccountDetails} />
                 </div>

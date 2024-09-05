@@ -51,16 +51,35 @@ function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
 }
 
+/* --------------------------------------
+// GET route to fetch site plans
+-------------------------------------- */
+app.get('/api/plans', async function (req, res) {
+    await delay(2500);
+    res.set('Access-Control-Allow-Origin', 'http://localhost:9001');
+
+    let planCodes = []
+    try {
+        const plans = client.listPlans({ params: {state: 'active'}})
+
+        for await (const plan of plans.each()) {
+            //console.log(plan.code)
+            planCodes.push({ id: plan.id, name: plan.name, code: plan.code })
+        }
+        res.status(200).send({ plans: planCodes });
+    }
+    catch (err) {
+        console.err(err)
+    }
+})
 
 /* --------------------------------------
 // POST route to handle a Purchase form
 -------------------------------------- */
 app.post('/api/subscriptions/new', async function (req, res) {
 
-    await delay(2500);
+    await delay(1500);
     res.set('Access-Control-Allow-Origin', 'http://localhost:9001');
-
-    //console.log('Creating purchase...', req.body);
 
     const accountDetails = req.body.accountInfo;
 
@@ -84,8 +103,11 @@ app.post('/api/subscriptions/new', async function (req, res) {
             }
         ]
     }
+
+    console.log(purchaseReq)
     try {
         let invoiceCollection = await client.createPurchase(purchaseReq)
+        console.log(invoiceCollection)
         res.status(200).send({ invoiceCollection: invoiceCollection.chargeInvoice })
     } catch (err) {
         if (err && err.transactionError && err.transactionError.code === 'three_d_secure_action_required') {
@@ -101,10 +123,8 @@ app.post('/api/subscriptions/new', async function (req, res) {
 -------------------------------------- */
 app.post('/api/subscriptions/3ds', async function (req, res) {
 
-    await delay(2500);
+    await delay(1500);
     res.set('Access-Control-Allow-Origin', 'http://localhost:9001');
-
-    //console.log('Creating purchase...', req.body);
 
     const account_code = req.body.accountCode;
 

@@ -33,7 +33,7 @@ const router = createBrowserRouter([
 export default function App() {
 
     return (
-        <RecurlyProvider publicKey="ewr1-1k3KHA1OafQwgO1SiKo0db">
+        <RecurlyProvider publicKey={public_api_key}>
             <Elements>
                 <RouterProvider router={router} />
             </Elements>
